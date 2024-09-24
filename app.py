@@ -58,22 +58,31 @@ def admin_manage_hods():
         return redirect(url_for('admin_manage_hods'))
     return render_template('manage_hods.html', hods=hods, departments=departments, instructors=instructors)
 
-@app.route('/admin/manage/courses', methods=['GET', 'POST'])
+@app.route('/admin/manage_courses', methods=['GET', 'POST'])
 def admin_manage_courses():
     courses = Course.query.all()
+    departments = Department.query.all() 
+    instructors = Instructor.query.all() 
+
     if request.method == 'POST':
         name = request.form['name']
         department_id = request.form['department_id']
         instructor_id = request.form['instructor_id']
+
         new_course = Course(name=name, department_id=department_id, instructor_id=instructor_id)
+
         db.session.add(new_course)
         db.session.commit()
+
         return redirect(url_for('admin_manage_courses'))
-    return render_template('manage_courses.html', courses=courses)
+    return render_template('manage_courses.html', courses=courses, departments=departments, instructors=instructors)
+
 
 @app.route('/admin/manage/enrollments', methods=['GET', 'POST'])
 def admin_manage_enrollments():
     enrollments = Enrollment.query.all()
+    students = Student.query.all() 
+    courses = Course.query.all() 
     if request.method == 'POST':
         student_id = request.form['student_id']
         course_id = request.form['course_id']
@@ -81,11 +90,13 @@ def admin_manage_enrollments():
         db.session.add(new_enrollment)
         db.session.commit()
         return redirect(url_for('admin_manage_enrollments'))
-    return render_template('manage_enrollments.html', enrollments=enrollments)
+    return render_template('manage_enrollments.html', enrollments=enrollments, students=students, courses=courses)
+
 
 @app.route('/admin/manage/departments', methods=['GET', 'POST'])
 def admin_manage_departments():
     departments = Department.query.all()
+    instructors = Instructor.query.all()  
     if request.method == 'POST':
         name = request.form['name']
         head_id = request.form.get('head_id', None)
@@ -93,7 +104,8 @@ def admin_manage_departments():
         db.session.add(new_department)
         db.session.commit()
         return redirect(url_for('admin_manage_departments'))
-    return render_template('manage_departments.html', departments=departments)
+    return render_template('manage_departments.html', departments=departments, instructors=instructors)
+
 
 @app.route('/admin/manage/instructors', methods=['GET', 'POST'])
 def admin_manage_instructors():
@@ -135,39 +147,57 @@ def instructor_manage_students():
 @app.route('/instructors/manage/courses', methods=['GET', 'POST'])
 def instructor_manage_courses():
     courses = Course.query.all()
+    departments = Department.query.all() 
+    instructors = Instructor.query.all() 
+
     if request.method == 'POST':
         name = request.form['name']
         department_id = request.form['department_id']
         instructor_id = request.form['instructor_id']
+
         new_course = Course(name=name, department_id=department_id, instructor_id=instructor_id)
         db.session.add(new_course)
         db.session.commit()
+
         return redirect(url_for('instructor_manage_courses'))
-    return render_template('manage_courses.html', courses=courses)
+
+    return render_template('manage_courses.html', courses=courses, departments=departments, instructors=instructors)
 
 @app.route('/instructors/manage/enrollments', methods=['GET', 'POST'])
 def instructor_manage_enrollments():
     enrollments = Enrollment.query.all()
+    students = Student.query.all() 
+    courses = Course.query.all()  
+
     if request.method == 'POST':
         student_id = request.form['student_id']
         course_id = request.form['course_id']
+
         new_enrollment = Enrollment(student_id=student_id, course_id=course_id)
         db.session.add(new_enrollment)
         db.session.commit()
+
         return redirect(url_for('instructor_manage_enrollments'))
-    return render_template('manage_enrollments.html', enrollments=enrollments)
+
+    return render_template('manage_enrollments.html', enrollments=enrollments, students=students, courses=courses)
 
 @app.route('/instructors/manage/exams', methods=['GET', 'POST'])
 def manage_exams():
     exams = Exam.query.all()
+    courses = Course.query.all()  
+
     if request.method == 'POST':
         course_id = request.form['course_id']
         date = request.form['date']
+
         new_exam = Exam(course_id=course_id, date=date)
         db.session.add(new_exam)
         db.session.commit()
+
         return redirect(url_for('manage_exams'))
-    return render_template('manage_exams.html', exams=exams)
+
+    return render_template('manage_exams.html', exams=exams, courses=courses)
+
 
 @app.route('/exam/add', methods=['POST'])
 def add_exam():
