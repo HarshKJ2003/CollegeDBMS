@@ -6,7 +6,10 @@ class Department(db.Model):
     __tablename__ = 'department'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
+    head_id = db.Column(db.Integer, db.ForeignKey('instructor.id'), nullable=True)  
     courses = db.relationship('Course', backref='department', lazy=True, cascade='all, delete-orphan')
+    hod = db.relationship('Instructor', backref='departments', foreign_keys=[head_id]) 
+
 
 class Instructor(db.Model):
     __tablename__ = 'instructor'

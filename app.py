@@ -1,8 +1,10 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash
 from model import db, Department, Course, Instructor, Student, Exam, Enrollment, HOD
+from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = '2003'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///college.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -76,22 +78,6 @@ def admin_manage_courses():
 
         return redirect(url_for('admin_manage_courses'))
     return render_template('manage_courses.html', courses=courses, departments=departments, instructors=instructors)
-
-
-@app.route('/admin/manage/enrollments', methods=['GET', 'POST'])
-def admin_manage_enrollments():
-    enrollments = Enrollment.query.all()
-    students = Student.query.all() 
-    courses = Course.query.all() 
-    if request.method == 'POST':
-        student_id = request.form['student_id']
-        course_id = request.form['course_id']
-        new_enrollment = Enrollment(student_id=student_id, course_id=course_id)
-        db.session.add(new_enrollment)
-        db.session.commit()
-        return redirect(url_for('admin_manage_enrollments'))
-    return render_template('manage_enrollments.html', enrollments=enrollments, students=students, courses=courses)
-
 
 @app.route('/admin/manage/departments', methods=['GET', 'POST'])
 def admin_manage_departments():
@@ -202,10 +188,15 @@ def manage_exams():
 @app.route('/exam/add', methods=['POST'])
 def add_exam():
     course_id = request.form['course_id']
-    date = request.form['date']
+    date_str = request.form['date']  
+    try:
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()  
+    except ValueError:
+        return "Invalid date format. Please use YYYY-MM-DD.", 400 
     new_exam = Exam(course_id=course_id, date=date)
     db.session.add(new_exam)
     db.session.commit()
+
     return redirect(url_for('manage_exams'))
 
 @app.route('/departments')
@@ -241,13 +232,13 @@ def add_course():
     new_course = Course(name=name, department_id=department_id, instructor_id=instructor_id)
     db.session.add(new_course)
     db.session.commit()
-    return redirect(url_for('courses'))
+    return redirect(url_for('admin_manage_courses'))
 
 @app.route('/course/delete/<int:id>', methods=['POST'])
 def delete_course(id):
     Course.query.filter_by(id=id).delete()
     db.session.commit()
-    return redirect(url_for('courses'))
+    return redirect(url_for('admin_manage_courses'))
 
 @app.route('/exams')
 def exams():
@@ -261,7 +252,7 @@ def exams():
 def delete_exam(id):
     Exam.query.filter_by(id=id).delete()
     db.session.commit()
-    return redirect(url_for('exams'))
+    return redirect(url_for('manage_exams'))
 
 @app.route('/students', methods=['GET', 'POST'])
 def student_enrollment():
@@ -280,7 +271,7 @@ def delete_student(id):
         flash('Student has been deleted successfully!', 'success')
     else:
         flash('Student not found!', 'danger')
-    return redirect(url_for('manage_students'))
+    return redirect(url_for('admin_manage_students'))
 
 @app.route('/admin/manage/hods/remove/<int:id>', methods=['POST'])
 def remove_hod(id):
@@ -314,14 +305,46 @@ def add_hod():
     db.session.commit()
     return redirect(url_for('admin_manage_hods'))
 
-@app.route('/admin/manage/enrollments/add', methods=['POST'])
+@app.route('/admin/manage/enrollments', methods=['GET', 'POST'])
+def admin_manage_enrollments():
+    enrollments = Enrollment.query.all()
+    students = Student.query.all() 
+    courses = Course.query.all() 
+    
+    if request.method == 'POST':
+        student_id = request.form['student_id']
+        course_id = request.form['course_id']
+        marks = request.form.get('marks') 
+        if marks:
+            try:
+                marks = int(marks) 
+            except ValueError:
+                marks = None 
+            
+            new_enrollment = Enrollment(student_id=student_id, course_id=course_id, marks=marks)  
+            db.session.add(new_enrollment)
+            db.session.commit()
+            return redirect(url_for('admin_manage_enrollments'))
+    
+    return render_template('manage_enrollments.html', enrollments=enrollments, students=students, courses=courses)
+
+@app.route('/enrollment/add', methods=['POST'])
 def add_enrollment():
-    student_id = request.form['student_id']
-    course_id = request.form['course_id']
-    new_enrollment = Enrollment(student_id=student_id, course_id=course_id)
+    student_id = request.form.get('student_id')
+    course_id = request.form.get('course_id')
+    marks = request.form.get('marks')
+    print(f"Student ID: {student_id}, Course ID: {course_id}, Marks: {marks}")
+    if not student_id or not course_id or not marks:
+        return "All fields are required.", 400  
+    try:
+        marks = int(marks)  
+    except ValueError:
+        return "Marks must be a number.", 400 
+    new_enrollment = Enrollment(student_id=student_id, course_id=course_id, marks=marks)
     db.session.add(new_enrollment)
     db.session.commit()
-    return redirect(url_for('admin_manage_enrollments'))
+
+    return redirect(url_for('admin_manage_enrollments')) 
 
 @app.route('/admin/manage/instructors/add', methods=['POST'])
 def add_instructor():
@@ -340,7 +363,7 @@ def delete_instructor(id):
         flash('Instructor has been deleted successfully!', 'success')
     else:
         flash('Instructor not found!', 'danger')
-    return redirect(url_for('manage_instructors'))
+    return redirect(url_for('admin_manage_instructors'))
 
 @app.route('/instructors/manage/hods/add', methods=['POST'])
 def instructor_add_hod():
@@ -360,7 +383,7 @@ def delete_enrollment(id):
         flash('Enrollment has been deleted successfully!', 'success')
     else:
         flash('Enrollment not found!', 'danger')
-    return redirect(url_for('manage_enrollments'))
+    return redirect(url_for('admin_manage_enrollments'))
 
 if __name__ == '__main__':
     with app.app_context():
