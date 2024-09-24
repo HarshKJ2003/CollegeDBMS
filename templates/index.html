@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%; 
+            margin: 0 auto; 
+            padding: 5px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            color: #2a4d69;
+            margin-top: 40px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            width: 30%;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .feature img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .feature h3 {
+            color: #2a4d69;
+            margin-top: 15px;
+        }
+
+        .feature p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 5px;
+            background-color: #2a4d69;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .feature {
+                width: 90%;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <h1>Welcome to the College Management System</h1>
+
+        <div class="features">
+            <div class="feature">
+                <img src="https://compote.slate.com/images/154c6089-a24a-4bfc-800f-ea37ea0073fe.jpg" alt="Manage Students" style="width: 100%; height: 350px; object-fit: cover;">
+                <h3>Manage Students</h3>
+                <p>Efficiently manage student data including enrollments, grades, and profiles.</p>
+            </div>
+
+            <div class="feature">
+                <img src="https://i0.wp.com/apeejay.news/wp-content/uploads/2023/10/281023-10-most-read-books-Blog.jpg?resize=740%2C524&ssl=1" alt="Manage Courses" style="width: 100%; height: 350px; object-fit: cover;">
+                <h3>Manage Courses</h3>
+                <p>Organize courses, schedule exams, and assign instructors easily.</p>
+            </div>
+
+            <div class="feature">
+                <img src="https://www.somaiya.edu/upload_file/images20/images/meeting-1.png" alt="Manage Instructors" style="width: 100%; height: 350px; object-fit: cover;">
+                <h3>Manage Instructors</h3>
+                <p>View and update instructor profiles and their course assignments.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 College Management System. All rights reserved.</p>
+    </footer>
+{% endblock %}

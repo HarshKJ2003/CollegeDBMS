@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f7; 
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 400px; 
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px; 
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 18px;  
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input[type="password"]:focus {
+            border-color: #5a67d8; 
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #5a67d8;  
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #4a56c8;
+            transform: scale(1.02); 
+        }
+
+        p {
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .error {
+            color: #e53e3e;  
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Login</h1>
+
+        <form action="{{ url_for('admin_auth') }}" method="POST">
+            <label for="password">Enter Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

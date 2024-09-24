@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4; 
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%; 
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px; 
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 28px;  
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+        }
+
+        a {
+            font-size: 20px;  
+            color: #5a67d8;  
+            text-decoration: none;
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #e2e8f0;  
+            border-color: #5a67d8;  
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;  
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <h2>Manage Entities</h2>
+
+        <ul>
+            <li><a href="{{ url_for('admin_manage_students') }}">Manage Students</a></li>
+            <li><a href="{{ url_for('admin_manage_courses') }}">Manage Courses</a></li>
+            <li><a href="{{ url_for('admin_manage_enrollments') }}">Manage Enrollments</a></li>
+            <li><a href="{{ url_for('admin_manage_departments') }}">Manage Departments</a></li>
+            <li><a href="{{ url_for('admin_manage_instructors') }}">Manage Instructors</a></li>
+            <li><a href="{{ url_for('admin_manage_hods') }}">Manage HODs</a></li>  
+        </ul>
+    </div>
+</body>
+</html>

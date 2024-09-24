@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #5a67d8;
+            color: white;
+            font-size: 18px;
+        }
+
+        table td {
+            font-size: 16px;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-hod {
+            color: red;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            table th, table td {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Departments</h1>
+
+        <table class="department-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Head of Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for department in departments %}
+                <tr>
+                    <td>{{ department.id }}</td>
+                    <td>{{ department.name }}</td>
+                    <td>
+                        {% if department.hods %}
+                            {{ department.hods[0].instructor.name }}
+                        {% else %}
+                            <span class="no-hod">No HOD Assigned</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
