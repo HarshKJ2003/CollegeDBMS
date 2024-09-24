@@ -1,20 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
+{% extends 'layout.html' %}
 
+{% block content %}
+    <style>
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 80px auto 0 auto;  
             background: white;
             padding: 20px;
             border-radius: 8px;
@@ -51,8 +41,7 @@
             background-color: #ddd;
         }
     </style>
-</head>
-<body>
+
     <div class="container">
         <h1>Courses</h1>
 
@@ -77,5 +66,4 @@
             </tbody>
         </table>
     </div>
-</body>
-</html>
+{% endblock %}
