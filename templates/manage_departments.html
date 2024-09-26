@@ -131,7 +131,6 @@
 <body>
     <div class="container">
         <h1>Manage Departments</h1>
-
         <table class="department-table">
             <thead>
                 <tr>
@@ -147,8 +146,8 @@
                     <td>{{ department.id }}</td>
                     <td>{{ department.name }}</td>
                     <td>
-                        {% if department.hod %}  <!-- Updated this line -->
-                            {{ department.hod.name }}
+                        {% if department.hod and department.hod.instructor %}
+                            {{ department.hod.instructor.name }}
                         {% else %}
                             <span class="no-hod">No HOD Assigned</span>
                         {% endif %}
@@ -162,7 +161,6 @@
                 {% endfor %}
             </tbody>
         </table>
-
         <div class="form-section">
             <h2>Add New Department</h2>
             <form action="{{ url_for('add_department') }}" method="POST">
@@ -176,7 +174,7 @@
                         <option value="{{ instructor.id }}">{{ instructor.name }}</option>
                     {% endfor %}
                 </select>
-                <button type="submit">Add Department</button>
+                <button type="submit" style="display: block; margin: 0 auto;">Add Department</button>
             </form>
         </div>
     </div>

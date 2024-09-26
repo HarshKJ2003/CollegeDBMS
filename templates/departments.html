@@ -91,8 +91,8 @@
                     <td>{{ department.id }}</td>
                     <td>{{ department.name }}</td>
                     <td>
-                        {% if department.hods %}
-                            {{ department.hods[0].instructor.name }}
+                        {% if department.hod and department.hod.instructor %}
+                            {{ department.hod.instructor.name }}
                         {% else %}
                             <span class="no-hod">No HOD Assigned</span>
                         {% endif %}
@@ -103,5 +103,6 @@
         </table>
     </div>
 </body>
+
 </html>
 {% endblock %}
