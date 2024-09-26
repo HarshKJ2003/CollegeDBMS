@@ -6,10 +6,8 @@ class Department(db.Model):
     __tablename__ = 'department'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
-    head_id = db.Column(db.Integer, db.ForeignKey('instructor.id'), nullable=True)  
     courses = db.relationship('Course', backref='department', lazy=True, cascade='all, delete-orphan')
-    hod = db.relationship('Instructor', backref='departments', foreign_keys=[head_id]) 
-
+    hod = db.relationship('HOD', uselist=False, back_populates='department', cascade='all, delete-orphan') 
 
 class Instructor(db.Model):
     __tablename__ = 'instructor'
@@ -17,14 +15,13 @@ class Instructor(db.Model):
     name = db.Column(db.String(100), nullable=False)
     courses = db.relationship('Course', backref='instructor', lazy=True, cascade='all, delete-orphan')
 
-
 class HOD(db.Model):
     __tablename__ = 'hod'
     id = db.Column(db.Integer, primary_key=True)
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'), nullable=False)
     instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'), nullable=False)
-
-    department = db.relationship('Department', backref='hods')
+    
+    department = db.relationship('Department', back_populates='hod')
     instructor = db.relationship('Instructor', backref='hod_of')
 
 class Course(db.Model):

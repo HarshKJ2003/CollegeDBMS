@@ -201,23 +201,32 @@ def add_exam():
 
 @app.route('/departments')
 def departments():
-    departments = Department.query.all()
+    departments = Department.query.outerjoin(HOD).outerjoin(Instructor).all()
     return render_template('departments.html', departments=departments)
+
 
 @app.route('/department/add', methods=['POST'])
 def add_department():
     name = request.form['name']
     head_id = request.form.get('head_id', None) 
-    new_department = Department(name=name, head_id=head_id)
+    new_department = Department(name=name)
     db.session.add(new_department)
-    db.session.commit()
-    return redirect(url_for('departments'))
+    db.session.commit()  
+    if head_id:
+        new_hod = HOD(department_id=new_department.id, instructor_id=head_id)
+        db.session.add(new_hod)
+        db.session.commit()
+    return redirect(url_for('admin_manage_departments'))  
 
 @app.route('/department/delete/<int:id>', methods=['POST'])
 def delete_department(id):
-    Department.query.filter_by(id=id).delete()
-    db.session.commit()
-    return redirect(url_for('departments'))
+    department = Department.query.get(id)
+    
+    if department:
+        db.session.delete(department)
+        db.session.commit()
+        
+    return redirect(url_for('admin_manage_departments'))
 
 @app.route('/courses')
 def courses():
